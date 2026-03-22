@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Webhook Client</title>
+</head>
+<body>
+  <h1>Curl Command Simulator</h1>
+  <pre>curl -X POST http://localhost:5000/paystack-webhook -d '{...}'</pre>
+  <button id="run-curl" onclick="simulateCurl()">Run Curl Command (Fetch)</button>
+  <div id="output" style="margin-top: 20px; font-weight: bold; font-family: monospace;"></div>
+
+  <script>
+    async function simulateCurl() {
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerText = 'Sending...';
+      try {
+        const response = await fetch('http://localhost:5000/paystack-webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event: 'charge.success',
+            data: {
+              customer: { email: 'simulated@webhook.com' },
+              plan: { plan_code: 'PLN_elite' }
+            }
+          })
+        });
+        outputDiv.innerText = 'Status: ' + response.status + ' ' + response.statusText;
+      } catch (err) {
+        outputDiv.innerText = 'Error: ' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
