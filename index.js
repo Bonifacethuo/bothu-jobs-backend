@@ -40,9 +40,21 @@ app.post('/paystack-webhook', (req, res) => {
   res.status(200).send('Webhook received successfully');
 });
 
-// Optionally, add a simple health check route
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+// Root route (prevents "Cannot GET /" error)
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Bothu Jobs Backend is running successfully 🚀",
+    status: "OK",
+  });
+});
+
+// Health check route (useful for Render uptime monitoring)
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    uptime: process.uptime(),
+    timestamp: new Date(),
+  });
 });
 
 app.listen(PORT, () => {
